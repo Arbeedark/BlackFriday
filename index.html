@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Black Friday Countdown</title>
   <style>
-    /* -----------------------------------------------
-       1) GLOBAL RESET + BACKGROUND
-       ----------------------------------------------- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
@@ -15,10 +12,9 @@
       background: #000000;
       font-family: Arial, sans-serif;
       overflow: hidden;
-      padding: 2rem; /* default buffer */
+      padding: 2rem;
     }
 
-    /* Responsive margin buffer */
     @media (max-width: 768px) {
       html, body { padding: 1rem; }
     }
@@ -26,20 +22,14 @@
       html, body { padding: 3rem; }
     }
 
-    /* -----------------------------------------------
-       2) WRAPPER
-       ----------------------------------------------- */
     #wrapper {
       position: relative;
       width: 100%; height: 100%;
       display: flex; justify-content: center; align-items: center;
       overflow: hidden;
-      padding: 1.5rem; /* inner safe zone */
+      padding: 1.25rem; /* slightly reduced */
     }
 
-    /* -----------------------------------------------
-       3) CANVASES
-       ----------------------------------------------- */
     #confetti-canvas, #fireworks-canvas {
       position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
@@ -48,13 +38,10 @@
     #confetti-canvas { z-index: 0; }
     #fireworks-canvas { z-index: 1; display: none; }
 
-    /* -----------------------------------------------
-       4) TIMER
-       ----------------------------------------------- */
     .timer {
       position: absolute;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -53%) scale(1); /* slight upward shift */
       transform-origin: center center;
       z-index: 2;
       text-align: center;
@@ -68,7 +55,7 @@
       font-weight: 900;
       text-transform: uppercase;
       font-size: 3rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.8rem; /* tighter spacing */
       text-shadow:
         0 0 12px rgba(235, 255, 145, 0.9),
         0 0 20px rgba(200, 255, 100, 0.4);
@@ -77,7 +64,7 @@
 
     .countdown-panel {
       background: rgba(0, 0, 0, 0.65);
-      padding: 1rem 1.5rem;
+      padding: 0.8rem 1.2rem; /* slightly tighter */
       border-radius: 1rem;
       box-shadow: 0 0 18px rgba(235, 255, 145, 0.4);
       border: 1px solid rgba(235, 255, 145, 0.3);
@@ -123,9 +110,6 @@
   </div>
 
   <script>
-    /********************************************
-     * COUNTDOWN
-     ********************************************/
     document.addEventListener('DOMContentLoaded', () => {
       const targetDate = new Date('2025-11-28T00:00:00');
       const cd = document.getElementById('countdown');
@@ -167,28 +151,22 @@
       countdownInterval = setInterval(updateCountdown, 1000);
     });
 
-    /********************************************
-     * RESPONSIVE SCALING
-     ********************************************/
     (function() {
       const wrapper = document.getElementById('wrapper');
       const timerEl = document.getElementById('timer');
       function rescale() {
         const availW = wrapper.clientWidth;
         const availH = wrapper.clientHeight;
-        timerEl.style.transform = 'translate(-50%, -50%) scale(1)';
+        timerEl.style.transform = 'translate(-50%, -53%) scale(1)';
         const baseW = timerEl.offsetWidth;
         const baseH = timerEl.offsetHeight;
         const scale = Math.min(availW / baseW, availH / baseH);
-        timerEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        timerEl.style.transform = `translate(-50%, -53%) scale(${scale})`;
       }
       window.addEventListener('DOMContentLoaded', rescale);
       window.addEventListener('resize', rescale);
     })();
 
-    /********************************************
-     * CONFETTI
-     ********************************************/
     (function() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
@@ -235,9 +213,6 @@
       window.addEventListener('DOMContentLoaded', () => { resizeCanvas(); drawConfetti(); });
     })();
 
-    /********************************************
-     * FIREWORKS
-     ********************************************/
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
       const ctx = canvas.getContext('2d');
