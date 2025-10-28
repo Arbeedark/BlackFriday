@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Put your HTML text here<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -27,7 +27,7 @@
       width: 100%; height: 100%;
       display: flex; justify-content: center; align-items: center;
       overflow: hidden;
-      padding: 1.25rem; /* slightly reduced */
+      padding: 1.25rem;
     }
 
     #confetti-canvas, #fireworks-canvas {
@@ -41,7 +41,7 @@
     .timer {
       position: absolute;
       top: 50%; left: 50%;
-      transform: translate(-50%, -53%) scale(1); /* slight upward shift */
+      transform: translate(-50%, -53%) scale(1);
       transform-origin: center center;
       z-index: 2;
       text-align: center;
@@ -55,30 +55,21 @@
       font-weight: 900;
       text-transform: uppercase;
       font-size: 3rem;
-      margin-bottom: 0.8rem; /* tighter spacing */
+      margin-bottom: 0.8rem;
       text-shadow:
         0 0 12px rgba(235, 255, 145, 0.9),
         0 0 20px rgba(200, 255, 100, 0.4);
       letter-spacing: 0.05em;
     }
 
-    .countdown-panel {
-      background: rgba(0, 0, 0, 0.65);
-      padding: 0.8rem 1.2rem; /* slightly tighter */
-      border-radius: 1rem;
-      box-shadow: 0 0 18px rgba(235, 255, 145, 0.4);
-      border: 1px solid rgba(235, 255, 145, 0.3);
-      width: 100%;
-      margin: 0 auto;
-    }
-
+    /* Removed countdown box entirely */
     #countdown {
       color: #ffffff;
       text-shadow:
         0 0 8px rgba(235, 255, 145, 0.8),
         0 0 16px rgba(235, 255, 145, 0.4);
       font-weight: 800;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       user-select: none;
       white-space: nowrap;
     }
@@ -103,9 +94,7 @@
 
     <div class="timer" id="timer">
       <h1 id="main-header">Black Friday</h1>
-      <div class="countdown-panel" id="countdown-panel">
-        <div id="countdown">Loading…</div>
-      </div>
+      <div id="countdown">Loading…</div>
     </div>
   </div>
 
@@ -113,7 +102,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const targetDate = new Date('2025-11-28T00:00:00');
       const cd = document.getElementById('countdown');
-      const countdownPanel = document.getElementById('countdown-panel');
       const header = document.getElementById('main-header');
       const fireworksCanvas = document.getElementById('fireworks-canvas');
       let countdownInterval, fireworksStarted = false;
@@ -139,7 +127,7 @@
 
       function startCelebration() {
         header.textContent = "Black Friday is here!";
-        countdownPanel.style.display = 'none';
+        cd.style.display = 'none';
         fireworksCanvas.style.display = 'block';
         if (!fireworksStarted) {
           initFireworks();
