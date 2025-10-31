@@ -1,4 +1,4 @@
-Put your HTML text here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -62,7 +62,6 @@ Put your HTML text here<!DOCTYPE html>
       letter-spacing: 0.05em;
     }
 
-    /* Removed countdown box entirely */
     #countdown {
       color: #ffffff;
       text-shadow:
@@ -139,22 +138,38 @@ Put your HTML text here<!DOCTYPE html>
       countdownInterval = setInterval(updateCountdown, 1000);
     });
 
+    /* ---------- IMPROVED RESPONSIVE SCALING ---------- */
     (function() {
       const wrapper = document.getElementById('wrapper');
       const timerEl = document.getElementById('timer');
+      const minScale = 0.6; // prevent too small
+      const maxScale = 2;   // prevent too large
+
       function rescale() {
         const availW = wrapper.clientWidth;
         const availH = wrapper.clientHeight;
+
+        // Reset before measuring
         timerEl.style.transform = 'translate(-50%, -53%) scale(1)';
-        const baseW = timerEl.offsetWidth;
-        const baseH = timerEl.offsetHeight;
-        const scale = Math.min(availW / baseW, availH / baseH);
+        const baseW = timerEl.scrollWidth;
+        const baseH = timerEl.scrollHeight;
+
+        // Compute scale
+        let scale = Math.min(availW / baseW, availH / baseH);
+        scale = Math.max(minScale, Math.min(scale, maxScale));
+
         timerEl.style.transform = `translate(-50%, -53%) scale(${scale})`;
       }
-      window.addEventListener('DOMContentLoaded', rescale);
+
       window.addEventListener('resize', rescale);
+      document.addEventListener('DOMContentLoaded', rescale);
+
+      // Observe parent/container changes (great for iframes)
+      const observer = new ResizeObserver(rescale);
+      observer.observe(wrapper);
     })();
 
+    /* ---------- CONFETTI ANIMATION ---------- */
     (function() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
@@ -201,6 +216,7 @@ Put your HTML text here<!DOCTYPE html>
       window.addEventListener('DOMContentLoaded', () => { resizeCanvas(); drawConfetti(); });
     })();
 
+    /* ---------- FIREWORKS ANIMATION ---------- */
     function initFireworks() {
       const canvas = document.getElementById('fireworks-canvas');
       const ctx = canvas.getContext('2d');
