@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Black Friday Countdown</title>
+  <title>H&B&Me Launch Countdown</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       width: 100%; height: 100%;
-      background: #000000;
+      background: #045435;
+      color: #ffffff;
       font-family: Arial, sans-serif;
       overflow: hidden;
       padding: 2rem;
@@ -56,33 +57,40 @@
       text-transform: uppercase;
       font-size: 3rem;
       margin-bottom: 0.8rem;
+      /* subtle white + violet-ish glow to match palette */
       text-shadow:
-        0 0 12px rgba(235, 255, 145, 0.9),
-        0 0 20px rgba(200, 255, 100, 0.4);
+        0 0 8px rgba(255,255,255,0.85),
+        0 0 18px rgba(210,172,255,0.25);
       letter-spacing: 0.05em;
     }
 
-    /* Removed countdown box entirely */
+    /* Countdown styling */
     #countdown {
-      color: #ffffff;
+      color: #d2acff; /* countdown colour */
       text-shadow:
-        0 0 8px rgba(235, 255, 145, 0.8),
-        0 0 16px rgba(235, 255, 145, 0.4);
+        0 0 6px rgba(210,172,255,0.9),
+        0 0 12px rgba(210,172,255,0.35);
       font-weight: 800;
       font-size: 2.4rem;
       user-select: none;
       white-space: nowrap;
     }
 
-    #countdown span { color: #f6ffca; }
+    #countdown span { color: #d2acff; }
     .count-unit {
       display: inline-block;
       font-size: 0.45em;
       vertical-align: super;
       margin-left: 0.1em;
       text-transform: uppercase;
-      opacity: 0.9;
-      color: #eaff91;
+      opacity: 0.95;
+      color: #d2acff;
+    }
+
+    /* respects users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #confetti-canvas, #fireworks-canvas { display:none !important; }
+      .timer { transition: none !important; }
     }
   </style>
 </head>
@@ -93,22 +101,28 @@
     <canvas id="fireworks-canvas"></canvas>
 
     <div class="timer" id="timer">
-      <h1 id="main-header">Get Ready!</h1>
+      <h1 id="main-header">H&amp;B&amp;Me Launch</h1>
       <div id="countdown">Loading…</div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const targetDate = new Date('2025-11-28T00:00:00');
+      // Target: 2nd Feb 2026, 00:00 UK time (UK is UTC+0 in Feb)
+      // Using UTC constructor to avoid local-time ambiguity:
+      const targetDate = new Date(Date.UTC(2026, 1, 2, 0, 0, 0)); // month is 0-indexed (1 = Feb)
       const cd = document.getElementById('countdown');
       const header = document.getElementById('main-header');
       const fireworksCanvas = document.getElementById('fireworks-canvas');
       let countdownInterval, fireworksStarted = false;
 
+      function formatNumber(n) {
+        return String(n);
+      }
+
       function updateCountdown() {
         const now = new Date();
-        const diff = targetDate - now;
+        const diff = targetDate.getTime() - now.getTime();
         if (diff <= 0) {
           clearInterval(countdownInterval);
           startCelebration();
@@ -119,14 +133,14 @@
         const m = Math.floor((diff / (1000 * 60)) % 60);
         const s = Math.floor((diff / 1000) % 60);
         cd.innerHTML =
-          `<span>${d}</span><span class="count-unit">D</span> ` +
-          `<span>${h}</span><span class="count-unit">H</span> ` +
-          `<span>${m}</span><span class="count-unit">M</span> ` +
-          `<span>${s}</span><span class="count-unit">S</span>`;
+          `<span>${formatNumber(d)}</span><span class="count-unit">D</span> ` +
+          `<span>${formatNumber(h)}</span><span class="count-unit">H</span> ` +
+          `<span>${formatNumber(m)}</span><span class="count-unit">M</span> ` +
+          `<span>${formatNumber(s)}</span><span class="count-unit">S</span>`;
       }
 
       function startCelebration() {
-        header.textContent = "Black Friday is here!";
+        header.textContent = "H&B&Me Launch is here!";
         cd.style.display = 'none';
         fireworksCanvas.style.display = 'block';
         if (!fireworksStarted) {
@@ -160,9 +174,10 @@
       const ctx = canvas.getContext('2d');
       let W, H;
       const particles = [];
-      const colors = ['#ffffff', '#eaff91'];
+      const colors = ['#ffffff', '#d2acff']; // confetti colours requested
 
       function resizeCanvas() {
+        // match display size
         W = canvas.width = canvas.offsetWidth;
         H = canvas.height = canvas.offsetHeight;
       }
@@ -181,6 +196,7 @@
           color: colors[Math.floor(Math.random() * colors.length)]
         };
       }
+      // spawn periodically
       setInterval(() => { for (let i = 0; i < 10; i++) particles.push(makeParticle()); }, 200);
 
       function drawConfetti() {
@@ -220,9 +236,8 @@
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
           const speed = Math.random() * 2.2 + 1.2;
-          const color = Math.random() < 0.5
-            ? 'hsl(70, 100%, 80%)'
-            : 'hsl(55, 100%, 70%)';
+          // pick from requested palette (white or purple)
+          const color = Math.random() < 0.5 ? '#ffffff' : '#d2acff';
           particles.push({
             x, y,
             vx: Math.cos(angle) * speed,
